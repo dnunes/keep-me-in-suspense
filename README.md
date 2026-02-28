@@ -2,7 +2,31 @@
 
 Built with a performance-first approach, every design decision prioritizes minimal resource usage so the extension itself never becomes the thing slowing your machine down.
 
-A Chrome extension that automatically suspends inactive tabs to free up memory and CPU, with configurable rules, whitelist support, and smart activity detection.
+A tab suspension extension with **full Chrome support** and **Vivaldi-exclusive extras**, automatically suspending inactive tabs to free up memory and CPU, with configurable rules, whitelist support, and smart activity detection.
+
+---
+
+## ⚠️ Current Status: Unusable
+
+The extension is currently non-functional and under active redesign. Do not attempt to install or use it yet.
+
+**Known issues to fix before it is usable:**
+- [ ] Core suspension logic needs review and testing
+- [ ] UI is incomplete
+- [ ] No real-world testing has been done
+
+---
+
+## Browser Support
+
+- **Chrome** — 100% supported. All features work as expected.
+- **Vivaldi** — 100% supported, plus additional Vivaldi-exclusive features not available in other browsers:
+  - **Workspaces** — use Vivaldi Workspaces as a grouping dimension for suspension rules, in addition to Chrome Tab Groups
+    - Needs investigation: Vivaldi Workspaces are not exposed via the standard Chrome extension API — research whether Vivaldi provides any internal/private API for this
+  - **Tab Stacks** — Vivaldi's equivalent of Chrome Tab Groups; needs investigation on whether the standard `tabGroups` API maps to Tab Stacks or if they are separate concepts entirely
+- **Other Chromium browsers** — should work as a baseline (untested)
+
+The goal is to support Vivaldi concepts that extensions typically ignore, while keeping full compatibility with Chrome. Vivaldi-exclusive features degrade gracefully when running on Chrome.
 
 ---
 
