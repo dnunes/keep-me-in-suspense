@@ -1,0 +1,403 @@
+.hidden { display: none !important; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-size: 0.875rem;
+}
+
+body {
+  width: 350px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Header */
+
+.header {
+  background: #4338ca;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.875rem;
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: 1.03rem;
+}
+
+.master-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.91rem;
+  cursor: pointer;
+}
+
+/* No-rule message */
+
+.no-rule-msg {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.45rem 0.875rem;
+  font-size: 0.89rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: white;
+  flex-wrap: wrap;
+}
+
+.whitelisted-section {
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.whitelisted-section .active-rule-summary {
+  color: #15803d;
+}
+
+.whitelisted-section .active-rule-name span {
+  color: #14532d;
+}
+
+.remove-whitelist-btn {
+  align-self: flex-start;
+  padding: 0.28rem 0.65rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.89rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: #dc2626;
+  color: white;
+}
+
+.remove-whitelist-btn:hover {
+  background: #b91c1c;
+}
+
+/* Active rule detail panel */
+
+.active-rule-section {
+  padding: 0.6rem 0.875rem;
+  border-bottom: 1px solid #bfdbfe;
+  background: #eff6ff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.active-rule-summary {
+  font-size: 0.94rem;
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.active-rule-name {
+  font-size: 0.89rem;
+  color: #334155;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.active-rule-name span {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.active-rule-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.active-rule-btn {
+  padding: 0.28rem 0.65rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.89rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: #1d4ed8;
+  color: white;
+}
+
+.active-rule-btn:hover {
+  background: #3730a3;
+}
+
+.active-rule-btn-danger {
+  background: #dc2626;
+}
+
+.active-rule-btn-danger:hover {
+  background: #b91c1c;
+}
+
+/* Add rule fieldset */
+
+.add-fieldset {
+  border: 1.5px solid #94a3b8;
+  border-radius: 6px;
+  margin: 0.4rem 0.5rem 0.25rem;
+  padding: 0 0 0.25rem;
+  min-width: 0;
+}
+
+.add-fieldset > legend {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #334155;
+  padding: 0 0.35rem;
+  margin-left: 0.4rem;
+}
+
+/* Delay row */
+
+.delay-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.875rem 0.25rem;
+  font-size: 0.91rem;
+  color: #64748b;
+}
+
+.delay-row input {
+  width: 44px;
+  padding: 0.15rem 0.3rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.91rem;
+  text-align: center;
+  background: white;
+  color: #1e293b;
+}
+
+/* Pattern list */
+
+.pattern-list {
+  list-style: none;
+  padding: 0 0.5rem 0.4rem;
+}
+
+.pattern-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pattern-item:hover:not(.pattern-added) {
+  background: #e0e7ff;
+}
+
+.pattern-label {
+  font-size: 0.94rem;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.pattern-added {
+  cursor: default;
+}
+
+.pattern-added .pattern-label {
+  color: #94a3b8;
+}
+
+.pattern-icon {
+  font-size: 1.14rem;
+  font-weight: 700;
+  color: #4338ca;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.pattern-check {
+  color: #22c55e;
+  font-size: 0.97rem;
+  flex-shrink: 0;
+}
+
+/* Inline confirm forms (whitelist + custom pattern) */
+
+.inline-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+fieldset.inline-form {
+  border: 1.5px solid #94a3b8;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem 0.4rem;
+  min-width: 0;
+}
+
+fieldset.inline-form > legend {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #334155;
+  padding: 0 0.3rem;
+  margin-left: 0.2rem;
+}
+
+.inline-form-group {
+  background: #e2e8f0;
+  border-radius: 6px;
+  padding: 0.45rem 0.5rem;
+  margin: 0 0.4rem 0.25rem;
+}
+
+.inline-input {
+  width: 100%;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.89rem;
+  color: #1e293b;
+  background: white;
+}
+
+.inline-form-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.inline-form-actions button {
+  padding: 0.25rem 0.7rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.89rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.inline-form-actions button:first-child {
+  background: #4338ca;
+  color: white;
+}
+
+.inline-form-actions button:first-child:hover {
+  background: #3730a3;
+}
+
+.btn-cancel {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+/* "Add custom..." row - visually distinct from pattern rows */
+
+.pattern-custom .pattern-label {
+  color: #64748b;
+  font-style: italic;
+}
+
+/* No URL message */
+
+.no-url {
+  padding: 0.6rem 0.875rem;
+  font-size: 0.94rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Divider */
+
+.divider {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Actions */
+
+.actions {
+  padding: 0.3rem 0.5rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.89rem;
+  color: #334155;
+  width: 100%;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.action-btn:disabled {
+  color: #94a3b8;
+  cursor: default;
+}
+
+.action-config {
+  color: #4338ca;
+  font-weight: 500;
+}
+
+/* Bulk actions */
+
+.bulk-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #e2e8f0;
+}
+
+.bulk-group {
+  padding: 0.2rem 0.25rem 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.bulk-group + .bulk-group {
+  border-left: 1px solid #e2e8f0;
+}
+
+.bulk-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.5rem 0.1rem;
+}

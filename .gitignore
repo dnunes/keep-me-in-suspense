@@ -1,0 +1,24 @@
+# Development docs (internal design notes, not for public repo)
+.dev/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node (if tooling is ever added)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build / packaging artifacts
+dist/
+build/
+*.zip
+*.crx

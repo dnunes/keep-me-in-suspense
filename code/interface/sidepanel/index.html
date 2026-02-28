@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keep Me in Suspense!</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="index.js" type="module"></script>
+</head>
+<body>
+<div class="panel">
+
+  <header class="panel-header">
+    <h1 class="panel-title">Keep Me in Suspense!</h1>
+    <button class="unsuspend-all-btn" id="unsuspendAllBtn">Unsuspend all</button>
+    <label class="master-toggle">
+      <input type="checkbox" id="masterEnabled" />
+      <span>Active</span>
+    </label>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">Settings</h2>
+    <div class="setting-row">
+      <span class="setting-label">Suspension mode</span>
+      <select id="suspensionMode">
+        <option value="replace">Custom page</option>
+        <option value="discard">Native discard</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Never suspend pinned tabs</span>
+      <input type="checkbox" id="neverSuspendPinned" />
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Activation rules</h2>
+    <p class="empty-msg hidden" id="activationEmpty">
+      No rules. Tabs will not be suspended.
+    </p>
+    <ul class="rule-list" id="activationList"></ul>
+    <button class="add-btn" id="addActivationBtn">+ New rule</button>
+    <div class="rule-form hidden" id="activationForm">
+      <select id="actType">
+        <option value="urlPattern">URL pattern</option>
+        <option value="chromeGroup">Chrome group</option>
+      </select>
+      <input
+        type="text"
+        id="actPattern"
+        class="text-input"
+        placeholder="*://example.com/*"
+      />
+      <input
+        type="text"
+        id="actGroup"
+        class="text-input hidden"
+        list="actGroupList"
+        placeholder="Group name"
+        autocomplete="off"
+      />
+      <datalist id="actGroupList"></datalist>
+      <p class="no-groups-msg hidden" id="actNoGroups">
+        No open groups. Rule activates when a group with this name opens.
+      </p>
+      <div class="delay-row">
+        <label for="actDelay">Suspend after</label>
+        <input type="number" id="actDelay" min="1" value="5" />
+        <span>min</span>
+      </div>
+      <p class="form-error hidden" id="actError"></p>
+      <div class="form-actions">
+        <button id="actSave">Add Rule</button>
+        <button id="actCancel" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Whitelist rules</h2>
+    <p class="empty-msg hidden" id="whitelistEmpty">
+      No custom rules.
+    </p>
+    <ul class="rule-list" id="whitelistList"></ul>
+    <button class="add-btn" id="addWhitelistBtn">+ New rule</button>
+    <div class="rule-form hidden" id="whitelistForm">
+      <select id="wlType">
+        <option value="urlPattern">URL pattern</option>
+        <option value="chromeGroup">Chrome group</option>
+      </select>
+      <input
+        type="text"
+        id="wlPattern"
+        class="text-input"
+        placeholder="*://example.com/*"
+      />
+      <input
+        type="text"
+        id="wlGroup"
+        class="text-input hidden"
+        list="wlGroupList"
+        placeholder="Group name"
+        autocomplete="off"
+      />
+      <datalist id="wlGroupList"></datalist>
+      <p class="no-groups-msg hidden" id="wlNoGroups">
+        No open groups. Rule activates when a group with this name opens.
+      </p>
+      <label class="checkbox-label">
+        <input type="checkbox" id="wlAudible" />
+        Only when playing audio
+      </label>
+      <p class="form-error hidden" id="wlError"></p>
+      <div class="form-actions">
+        <button id="wlSave">Add Rule</button>
+        <button id="wlCancel" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Media Players</h2>
+    <p class="section-desc">
+      Sites listed here will never be suspended while they are playing audio.
+    </p>
+    <p class="empty-msg hidden" id="mediaEmpty">No media player rules.</p>
+    <ul class="rule-list" id="mediaList"></ul>
+    <button class="add-btn" id="addMediaBtn">+ Add site</button>
+    <div class="rule-form hidden" id="mediaForm">
+      <input
+        type="text"
+        id="mediaDomain"
+        class="text-input"
+        placeholder="youtube.com"
+      />
+      <p class="form-hint">
+        Tabs on this site won't be suspended while playing audio.
+        Enter just the domain, subdomains are matched automatically.
+      </p>
+      <p class="form-error hidden" id="mediaError"></p>
+      <div class="form-actions">
+        <button id="mediaSave">Add Rule</button>
+        <button id="mediaCancel" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ TEMPLATES ════════════════════════════════
+       These are never rendered - JS clones them to build each rule row. -->
+
+  <!-- Activation rule row (two-line layout: type+delay on top, value below) -->
+  <template id="activationRuleTpl">
+    <li class="rule-row rule-row-stack">
+      <div class="rule-row-top">
+        <span class="badge badge-warn js-broken hidden">Not found</span>
+        <span class="badge js-type"></span>
+        <span class="rule-delay js-delay"></span>
+        <button class="delete-btn js-delete" title="Remove rule">✕</button>
+      </div>
+      <div class="rule-label js-label"></div>
+    </li>
+  </template>
+
+  <!-- Whitelist rule row (single line: type badge + value + optional badges) -->
+  <template id="whitelistRuleTpl">
+    <li class="rule-row">
+      <div class="rule-info">
+        <span class="badge js-type"></span>
+        <span class="rule-label js-label"></span>
+        <span class="badge badge-warn js-broken hidden">Not found</span>
+        <span class="badge badge-aud js-audible hidden">Audible</span>
+      </div>
+      <button class="delete-btn js-delete" title="Remove rule">✕</button>
+    </li>
+  </template>
+
+  <!-- Media player rule row (domain label + delete button) -->
+  <template id="mediaRuleTpl">
+    <li class="rule-row">
+      <span class="rule-label js-label"></span>
+      <button class="delete-btn js-delete" title="Remove site">✕</button>
+    </li>
+  </template>
+
+</div>
+</body>
+</html>

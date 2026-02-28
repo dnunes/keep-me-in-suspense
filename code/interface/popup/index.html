@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Keep Me in Suspense!</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="index.js" type="module"></script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════ HEADER ═══════════════════════════════════ -->
+
+  <header class="header">
+    <span class="app-title">Keep Me in Suspense!</span>
+    <label class="master-toggle">
+      <input type="checkbox" id="masterEnabled" />
+      <span>Active</span>
+    </label>
+  </header>
+
+  <!-- ════════════════════════════ STATUS BAR ══════════════════════════════════ -->
+
+  <!-- Shown when current tab is matched by an activation rule -->
+  <div id="activeRuleSection" class="active-rule-section hidden">
+    <p class="active-rule-summary">
+      Suspends in <span id="activeRuleDelay"></span>
+    </p>
+    <p class="active-rule-name">
+      Rule: <span id="activeRuleName"></span
+      ><span id="activeRuleGroupTag" class="hidden"> (Tab Group)</span>
+    </p>
+    <div class="active-rule-actions">
+      <!-- Hidden when the activation rule already exactly matches this URL -->
+      <button id="addToWhitelistBtn" class="active-rule-btn hidden">
+        Add to whitelist
+      </button>
+      <!-- Inline form - shown after clicking "Add to whitelist" -->
+      <fieldset id="whitelistInlineForm" class="inline-form hidden">
+        <legend>Add to whitelist</legend>
+        <input type="text" id="whitelistInput" class="inline-input" />
+        <div class="inline-form-actions">
+          <button id="whitelistConfirmBtn">Confirm</button>
+          <button id="whitelistCancelBtn" class="btn-cancel">Cancel</button>
+        </div>
+      </fieldset>
+      <button id="removeRuleBtn" class="active-rule-btn active-rule-btn-danger">
+        Remove rule
+      </button>
+    </div>
+  </div>
+
+  <!-- Shown when current tab is whitelisted -->
+  <div id="statusWhitelisted" class="whitelisted-section hidden">
+    <p id="whitelistSummary" class="active-rule-summary"></p>
+    <p id="whitelistRuleRow" class="active-rule-name hidden">
+      Rule: <span id="statusWhitelistRule"></span>
+    </p>
+    <button id="removeWhitelistBtn" class="remove-whitelist-btn hidden">
+      Remove rule
+    </button>
+  </div>
+
+  <!-- Shown when no rule matches the current tab -->
+  <div id="statusNone" class="no-rule-msg hidden">
+    No activation rule for this page.
+  </div>
+
+  <!-- ══════════════════════════ ADD ACTIVATION RULE ═══════════════════════════ -->
+
+  <!-- Template cloned once per generated URL/group pattern -->
+  <template id="patternItemTpl">
+    <li class="pattern-item">
+      <span class="pattern-label"></span>
+      <span class="pattern-icon">+</span>
+    </li>
+  </template>
+
+  <!-- Shown for normal trackable pages -->
+  <div id="addSection" class="hidden">
+    <fieldset class="add-fieldset">
+      <legend>Auto suspend this page</legend>
+      <div class="delay-row">
+        Activate after
+        <input type="number" id="delay" min="1" value="5" />
+        min
+      </div>
+      <ul class="pattern-list">
+        <!-- Generated pattern rows are inserted here by JS -->
+        <!-- Custom pattern - user edits before confirming -->
+        <li id="p4" class="pattern-item pattern-custom">
+          <span class="pattern-label">Add custom...</span>
+          <span class="pattern-icon">+</span>
+        </li>
+      </ul>
+      <!-- Inline form - shown after clicking "Add custom..." -->
+      <div id="customInlineForm" class="inline-form inline-form-group hidden">
+        <input type="text" id="customInput" class="inline-input" />
+        <div class="inline-form-actions">
+          <button id="customConfirmBtn">Add Rule</button>
+          <button id="customCancelBtn" class="btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- Shown when the page can't have rules (chrome:// pages, extension pages) -->
+  <p id="noUrlMsg" class="no-url hidden">No rules available for this page.</p>
+
+  <!-- ════════════════════════════════ ACTIONS ═════════════════════════════════ -->
+
+  <hr class="divider" />
+
+  <!-- Single-tab actions -->
+  <div id="singleActions" class="actions">
+    <!-- Shown for normal trackable pages -->
+    <button id="suspendBtn" class="action-btn hidden">Suspend tab</button>
+    <!-- Shown when the current tab is itself a suspended page -->
+    <button id="unsuspendCurrentBtn" class="action-btn hidden">Unsuspend tab</button>
+  </div>
+
+  <!-- Bulk actions: two groups side by side -->
+  <div class="bulk-actions">
+    <div class="bulk-group">
+      <span class="bulk-label">This window</span>
+      <button id="suspendOthersWindowBtn" class="action-btn">Suspend others</button>
+      <button id="suspendAllWindowBtn"    class="action-btn">Suspend all</button>
+      <button id="unsuspendAllWindowBtn"  class="action-btn">Unsuspend all</button>
+    </div>
+    <div class="bulk-group">
+      <span class="bulk-label">All windows</span>
+      <button id="suspendOthersAllBtn" class="action-btn">Suspend others</button>
+      <button id="suspendAllAllBtn"    class="action-btn">Suspend all</button>
+      <button id="unsuspendAllBtn"     class="action-btn">Unsuspend all</button>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="actions">
+    <button id="configBtn" class="action-btn action-config">Configuration →</button>
+  </div>
+
+</body>
+</html>

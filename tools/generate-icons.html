@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generate Icons</title>
+  <style>
+    body { font-family: system-ui; padding: 2rem; background: #f1f5f9; }
+    canvas { border: 1px solid #e2e8f0; border-radius: 4px; margin: 0.5rem; }
+    button { margin-top: 1.5rem; padding: 0.6rem 1.5rem; background: #4338ca; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #3730a3; }
+  </style>
+</head>
+<body>
+  <h2>Icon Preview</h2>
+  <div id="previews"></div>
+  <button onclick="downloadAll()">Download all PNGs</button>
+
+  <script>
+    const SIZES = [16, 32, 48, 128];
+
+    function drawIcon(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // Rounded rectangle background
+      const r = Math.round(size * (8 / 48));
+      ctx.beginPath();
+      ctx.moveTo(r, 0);
+      ctx.lineTo(size - r, 0);
+      ctx.arcTo(size, 0, size, r, r);
+      ctx.lineTo(size, size - r);
+      ctx.arcTo(size, size, size - r, size, r);
+      ctx.lineTo(r, size);
+      ctx.arcTo(0, size, 0, size - r, r);
+      ctx.lineTo(0, r);
+      ctx.arcTo(0, 0, r, 0, r);
+      ctx.closePath();
+      ctx.fillStyle = '#4338ca';
+      ctx.fill();
+
+      // "zZ" text
+      const fontSize = Math.round(size * (26 / 48));
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText('zZ', size / 2, Math.round(size * (34 / 48)));
+
+      return canvas;
+    }
+
+    // Render previews
+    const container = document.getElementById('previews');
+    for (const size of SIZES) {
+      const canvas = drawIcon(size);
+      canvas.title = `${size}×${size}`;
+      container.appendChild(canvas);
+    }
+
+    function downloadAll() {
+      for (const size of SIZES) {
+        const canvas = drawIcon(size);
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = `icon${size}.png`;
+        a.click();
+      }
+    }
+  </script>
+</body>
+</html>

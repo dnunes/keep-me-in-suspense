@@ -1,0 +1,136 @@
+.hidden { display: none !important; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-size: 0.875rem;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+  background: #0f172a;
+}
+
+/* Full-page blurred screenshot backdrop */
+
+.screenshot {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(7px);
+  transform: scale(1.07); /* prevent blur from exposing edges */
+}
+
+/* Bottom floating card */
+
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 3rem);
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Row 1: favicon + title + reload button */
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.favicon {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.09rem;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reload-btn {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  background: #4338ca;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.94rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reload-btn:hover {
+  background: #3730a3;
+}
+
+/* Row 2: URL · suspended at */
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.page-url {
+  font-size: 0.89rem;
+  color: #3b82f6;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.page-url:hover {
+  text-decoration: underline;
+}
+
+.meta-sep {
+  color: #cbd5e1;
+  font-size: 0.89rem;
+  flex-shrink: 0;
+}
+
+.suspended-at {
+  font-size: 0.89rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

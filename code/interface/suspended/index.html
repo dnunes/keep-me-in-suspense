@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suspended</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="icon" id="favicon" type="image/png" href="../../../assets/icons/icon48.png" />
+  <script src="index.js" type="module"></script>
+</head>
+<body>
+  <main id="app"></main>
+
+  <!-- Full suspended page layout: blurred screenshot + info card -->
+  <template id="suspendedTpl">
+    <div class="screenshot js-screenshot hidden"></div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <img class="favicon js-favicon hidden" />
+          <h1 class="page-title js-title"></h1>
+        </div>
+        <button class="reload-btn js-reload">Reload Suspended Tab</button>
+      </div>
+      <div class="card-meta">
+        <a class="page-url js-url"></a>
+        <span class="meta-sep">·</span>
+        <span class="suspended-at js-at"></span>
+      </div>
+    </div>
+  </template>
+
+  <!-- Fallback card shown when URL data is missing -->
+  <template id="fallbackTpl">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h1 class="page-title">Suspended tab</h1>
+        </div>
+        <button class="reload-btn js-back">Go back</button>
+      </div>
+    </div>
+  </template>
+
+</body>
+</html>
