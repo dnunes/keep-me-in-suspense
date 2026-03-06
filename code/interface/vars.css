@@ -1,0 +1,188 @@
+/* ═══════════════════════════════════════════════════════════════
+   vars.css — design tokens for both themes
+   Linked before shared.css and index.css in every HTML page.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Dark theme (default) ───────────────────────────────────── */
+:root {
+  /* Typography */
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'Courier New', monospace;
+
+  /* Border radii */
+  --radius-sm: 4px;
+  --radius:    6px;
+  --radius-lg: 8px;
+
+  /* Surfaces */
+  --color-bg:             #0f172a;
+  --color-surface:        #1e293b;
+  --color-surface-raised: #263147;
+  --color-surface-hover:  #2d3e56;
+
+  /* Borders */
+  --color-border:        rgba(148, 163, 184, 0.12);
+  --color-border-strong: rgba(148, 163, 184, 0.22);
+
+  /* Text */
+  --color-text:           #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:     #475569;
+
+  /* Accent — vivid green */
+  --color-accent:        #4ade80;
+  --color-accent-hover:  #86efac;
+  --color-accent-subtle: rgba(74, 222, 128, 0.1);
+  --color-accent-border: rgba(74, 222, 128, 0.22);
+  --color-accent-text:   #052e16;
+
+  /* Subheadings — muted green */
+  --color-subhead: #6ee7b7;
+
+  /* Brand title — vivid green on dark header */
+  --color-brand-text: #4ade80;
+
+  /* Header — dark surface */
+  --color-header-bg:        #1e293b;
+  --color-header-text:      #f1f5f9;
+  --color-header-border:    rgba(148, 163, 184, 0.25);
+  --color-header-hover:     rgba(148, 163, 184, 0.1);
+  --color-header-separator: rgba(148, 163, 184, 0.12);
+
+  /* Success — teal (distinct from accent green) */
+  --color-success:        #2dd4bf;
+  --color-success-subtle: rgba(45, 212, 191, 0.08);
+  --color-success-border: rgba(45, 212, 191, 0.25);
+
+  /* Danger — red */
+  --color-danger:        #f87171;
+  --color-danger-hover:  #fca5a5;
+  --color-danger-subtle: rgba(248, 113, 113, 0.08);
+  --color-danger-border: rgba(248, 113, 113, 0.25);
+
+  /* Toggle */
+  --color-toggle-track:           rgba(148, 163, 184, 0.15);
+  --color-toggle-track-border:    rgba(148, 163, 184, 0.25);
+  --color-toggle-thumb:           #475569;
+  --color-toggle-track-on:        rgba(74, 222, 128, 0.2);
+  --color-toggle-track-border-on: rgba(74, 222, 128, 0.45);
+  --color-toggle-thumb-on:        #4ade80;
+}
+
+/* ── Light theme — OS preference ───────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg:             #f1f5f9;
+    --color-surface:        #ffffff;
+    --color-surface-raised: #f8fafc;
+    --color-surface-hover:  #e2e8f0;
+    --color-border:        #e2e8f0;
+    --color-border-strong: #cbd5e1;
+    --color-text:           #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-muted:     #94a3b8;
+    --color-accent:        #16a34a;
+    --color-accent-hover:  #15803d;
+    --color-accent-subtle: #f0fdf4;
+    --color-accent-border: #86efac;
+    --color-accent-text:   #ffffff;
+    --color-subhead:       #059669;
+    --color-brand-text:    #ffffff;
+    --color-header-bg:        #15803d;
+    --color-header-text:      #ffffff;
+    --color-header-border:    rgba(255, 255, 255, 0.4);
+    --color-header-hover:     rgba(255, 255, 255, 0.15);
+    --color-header-separator: transparent;
+    --color-success:        #0d9488;
+    --color-success-subtle: #f0fdfa;
+    --color-success-border: #99f6e4;
+    --color-danger:        #dc2626;
+    --color-danger-hover:  #b91c1c;
+    --color-danger-subtle: #fef2f2;
+    --color-danger-border: #fca5a5;
+    --color-toggle-track:           rgba(255, 255, 255, 0.2);
+    --color-toggle-track-border:    rgba(255, 255, 255, 0.35);
+    --color-toggle-thumb:           rgba(255, 255, 255, 0.6);
+    --color-toggle-track-on:        rgba(255, 255, 255, 0.3);
+    --color-toggle-track-border-on: rgba(255, 255, 255, 0.65);
+    --color-toggle-thumb-on:        #ffffff;
+  }
+}
+
+/* ── Light theme — manual override (in-app toggle) ──────────── */
+/* html[data-theme="light"] has higher specificity than :root,   */
+/* so it wins over both the dark default and the OS media query. */
+html[data-theme="light"] {
+  --color-bg:             #f1f5f9;
+  --color-surface:        #ffffff;
+  --color-surface-raised: #f8fafc;
+  --color-surface-hover:  #e2e8f0;
+  --color-border:        #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-text:           #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-muted:     #94a3b8;
+  --color-accent:        #16a34a;
+  --color-accent-hover:  #15803d;
+  --color-accent-subtle: #f0fdf4;
+  --color-accent-border: #86efac;
+  --color-accent-text:   #ffffff;
+  --color-subhead:       #059669;
+  --color-brand-text:    #ffffff;
+  --color-header-bg:        #15803d;
+  --color-header-text:      #ffffff;
+  --color-header-border:    rgba(255, 255, 255, 0.4);
+  --color-header-hover:     rgba(255, 255, 255, 0.15);
+  --color-header-separator: transparent;
+  --color-success:        #0d9488;
+  --color-success-subtle: #f0fdfa;
+  --color-success-border: #99f6e4;
+  --color-danger:        #dc2626;
+  --color-danger-hover:  #b91c1c;
+  --color-danger-subtle: #fef2f2;
+  --color-danger-border: #fca5a5;
+  --color-toggle-track:           rgba(255, 255, 255, 0.2);
+  --color-toggle-track-border:    rgba(255, 255, 255, 0.35);
+  --color-toggle-thumb:           rgba(255, 255, 255, 0.6);
+  --color-toggle-track-on:        rgba(255, 255, 255, 0.3);
+  --color-toggle-track-border-on: rgba(255, 255, 255, 0.65);
+  --color-toggle-thumb-on:        #ffffff;
+}
+
+/* ── Dark theme — manual override (forces dark on light OS) ─── */
+html[data-theme="dark"] {
+  --color-bg:             #0f172a;
+  --color-surface:        #1e293b;
+  --color-surface-raised: #263147;
+  --color-surface-hover:  #2d3e56;
+  --color-border:        rgba(148, 163, 184, 0.12);
+  --color-border-strong: rgba(148, 163, 184, 0.22);
+  --color-text:           #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:     #475569;
+  --color-accent:        #4ade80;
+  --color-accent-hover:  #86efac;
+  --color-accent-subtle: rgba(74, 222, 128, 0.1);
+  --color-accent-border: rgba(74, 222, 128, 0.22);
+  --color-accent-text:   #052e16;
+  --color-subhead:       #6ee7b7;
+  --color-brand-text:    #4ade80;
+  --color-header-bg:        #1e293b;
+  --color-header-text:      #f1f5f9;
+  --color-header-border:    rgba(148, 163, 184, 0.25);
+  --color-header-hover:     rgba(148, 163, 184, 0.1);
+  --color-header-separator: rgba(148, 163, 184, 0.12);
+  --color-success:        #2dd4bf;
+  --color-success-subtle: rgba(45, 212, 191, 0.08);
+  --color-success-border: rgba(45, 212, 191, 0.25);
+  --color-danger:        #f87171;
+  --color-danger-hover:  #fca5a5;
+  --color-danger-subtle: rgba(248, 113, 113, 0.08);
+  --color-danger-border: rgba(248, 113, 113, 0.25);
+  --color-toggle-track:           rgba(148, 163, 184, 0.15);
+  --color-toggle-track-border:    rgba(148, 163, 184, 0.25);
+  --color-toggle-thumb:           #475569;
+  --color-toggle-track-on:        rgba(74, 222, 128, 0.2);
+  --color-toggle-track-border-on: rgba(74, 222, 128, 0.45);
+  --color-toggle-thumb-on:        #4ade80;
+}

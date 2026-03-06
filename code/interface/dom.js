@@ -3,6 +3,7 @@
 // Not available in the background service worker.
 // =============================================================================
 
+
 export const DOM = {
   get(id) { return document.getElementById(id); },
   show(el) { el.classList.remove('hidden'); },

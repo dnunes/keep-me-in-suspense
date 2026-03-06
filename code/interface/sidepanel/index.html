@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keep Me in Suspense!</title>
+  <link rel="stylesheet" href="../vars.css" />
+  <link rel="stylesheet" href="../shared.css" />
   <link rel="stylesheet" href="index.css" />
   <script src="index.js" type="module"></script>
 </head>
@@ -11,16 +13,42 @@
 <div class="panel">
 
   <header class="panel-header">
-    <h1 class="panel-title">Keep Me in Suspense!</h1>
-    <button class="unsuspend-all-btn" id="unsuspendAllBtn">Unsuspend all</button>
-    <label class="master-toggle">
-      <input type="checkbox" id="masterEnabled" />
-      <span>Active</span>
-    </label>
+    <h1 class="panel-title">Keep Me<br>In Suspense!</h1>
+    <div class="panel-header-right">
+      <label class="master-toggle">
+        <input type="checkbox" id="masterEnabled" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">Active</span>
+      </label>
+      <button class="unsuspend-all-btn" id="unsuspendAllBtn">Unsuspend all tabs</button>
+    </div>
   </header>
 
   <section class="section">
-    <h2 class="section-title">Settings</h2>
+    <div class="section-header">
+      <h2 class="section-title">Settings</h2>
+      <div class="theme-switcher" id="themeSwitcher">
+        <button class="theme-btn" data-theme-value="light" title="Light theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2"     x2="12" y2="4"/>
+            <line x1="12" y1="20"    x2="12" y2="22"/>
+            <line x1="2"  y1="12"    x2="4"  y2="12"/>
+            <line x1="20" y1="12"    x2="22" y2="12"/>
+            <line x1="4.93"  y1="4.93"  x2="6.34"  y2="6.34"/>
+            <line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+            <line x1="4.93"  y1="19.07" x2="6.34"  y2="17.66"/>
+            <line x1="17.66" y1="6.34"  x2="19.07" y2="4.93"/>
+          </svg>
+        </button>
+        <button class="theme-btn" data-theme-value="dark" title="Dark theme">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="theme-btn" data-theme-value="auto" title="System default">A</button>
+      </div>
+    </div>
     <div class="setting-row">
       <span class="setting-label">Suspension mode</span>
       <select id="suspensionMode">
@@ -44,7 +72,7 @@
     <div class="rule-form hidden" id="activationForm">
       <select id="actType">
         <option value="urlPattern">URL pattern</option>
-        <option value="chromeGroup">Chrome group</option>
+        <option value="tabGroup">Tab Group / Stack</option>
       </select>
       <input
         type="text"
@@ -87,7 +115,7 @@
     <div class="rule-form hidden" id="whitelistForm">
       <select id="wlType">
         <option value="urlPattern">URL pattern</option>
-        <option value="chromeGroup">Chrome group</option>
+        <option value="tabGroup">Tab Group / Stack</option>
       </select>
       <input
         type="text"

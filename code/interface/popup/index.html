@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Keep Me in Suspense!</title>
+  <link rel="stylesheet" href="../vars.css" />
+  <link rel="stylesheet" href="../shared.css" />
   <link rel="stylesheet" href="index.css" />
   <script src="index.js" type="module"></script>
 </head>
@@ -11,11 +13,16 @@
   <!-- ═══════════════════════════════ HEADER ═══════════════════════════════════ -->
 
   <header class="header">
-    <span class="app-title">Keep Me in Suspense!</span>
-    <label class="master-toggle">
-      <input type="checkbox" id="masterEnabled" />
-      <span>Active</span>
-    </label>
+    <span class="app-title">Keep Me<br>In Suspense!</span>
+    <div class="header-right">
+      <label class="master-toggle">
+        <input type="checkbox" id="masterEnabled" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">Active</span>
+      </label>
+      <button id="suspendBtn" class="header-action-btn hidden">Suspend current tab</button>
+      <button id="unsuspendCurrentBtn" class="header-action-btn hidden">Unsuspend tab</button>
+    </div>
   </header>
 
   <!-- ════════════════════════════ STATUS BAR ══════════════════════════════════ -->
@@ -62,7 +69,8 @@
 
   <!-- Shown when no rule matches the current tab -->
   <div id="statusNone" class="no-rule-msg hidden">
-    No activation rule for this page.
+    <span class="no-rule-icon">○</span>
+    <span>No activation rule for this page</span>
   </div>
 
   <!-- ══════════════════════════ ADD ACTIVATION RULE ═══════════════════════════ -->
@@ -76,68 +84,59 @@
   </template>
 
   <!-- Shown for normal trackable pages -->
-  <div id="addSection" class="hidden">
-    <fieldset class="add-fieldset">
-      <legend>Auto suspend this page</legend>
-      <div class="delay-row">
-        Activate after
-        <input type="number" id="delay" min="1" value="5" />
-        min
+  <div id="addSection" class="popup-card hidden">
+    <h2 class="popup-card-title">Auto suspend this page</h2>
+    <div class="delay-row">
+      Activate after
+      <input type="number" id="delay" min="1" value="5" />
+      min
+    </div>
+    <ul class="pattern-list">
+      <!-- Generated pattern rows are inserted here by JS -->
+      <!-- Custom pattern - user edits before confirming -->
+      <li id="p4" class="pattern-item pattern-custom">
+        <span class="pattern-label">+ Add custom...</span>
+      </li>
+    </ul>
+    <!-- Inline form - shown after clicking "Add custom..." -->
+    <div id="customInlineForm" class="inline-form inline-form-group hidden">
+      <input type="text" id="customInput" class="inline-input" />
+      <div class="inline-form-actions">
+        <button id="customConfirmBtn">Add Rule</button>
+        <button id="customCancelBtn" class="btn-cancel">Cancel</button>
       </div>
-      <ul class="pattern-list">
-        <!-- Generated pattern rows are inserted here by JS -->
-        <!-- Custom pattern - user edits before confirming -->
-        <li id="p4" class="pattern-item pattern-custom">
-          <span class="pattern-label">Add custom...</span>
-          <span class="pattern-icon">+</span>
-        </li>
-      </ul>
-      <!-- Inline form - shown after clicking "Add custom..." -->
-      <div id="customInlineForm" class="inline-form inline-form-group hidden">
-        <input type="text" id="customInput" class="inline-input" />
-        <div class="inline-form-actions">
-          <button id="customConfirmBtn">Add Rule</button>
-          <button id="customCancelBtn" class="btn-cancel">Cancel</button>
-        </div>
-      </div>
-    </fieldset>
+    </div>
   </div>
 
-  <!-- Shown when the page can't have rules (chrome:// pages, extension pages) -->
+  <!-- Shown when the page can't have rules (browser internal pages, extension pages) -->
   <p id="noUrlMsg" class="no-url hidden">No rules available for this page.</p>
 
   <!-- ════════════════════════════════ ACTIONS ═════════════════════════════════ -->
 
-  <hr class="divider" />
+  <div class="popup-card">
+    <h2 class="popup-card-title">Actions</h2>
 
-  <!-- Single-tab actions -->
-  <div id="singleActions" class="actions">
-    <!-- Shown for normal trackable pages -->
-    <button id="suspendBtn" class="action-btn hidden">Suspend tab</button>
-    <!-- Shown when the current tab is itself a suspended page -->
-    <button id="unsuspendCurrentBtn" class="action-btn hidden">Unsuspend tab</button>
-  </div>
-
-  <!-- Bulk actions: two groups side by side -->
-  <div class="bulk-actions">
-    <div class="bulk-group">
-      <span class="bulk-label">This window</span>
-      <button id="suspendOthersWindowBtn" class="action-btn">Suspend others</button>
-      <button id="suspendAllWindowBtn"    class="action-btn">Suspend all</button>
-      <button id="unsuspendAllWindowBtn"  class="action-btn">Unsuspend all</button>
-    </div>
-    <div class="bulk-group">
-      <span class="bulk-label">All windows</span>
-      <button id="suspendOthersAllBtn" class="action-btn">Suspend others</button>
-      <button id="suspendAllAllBtn"    class="action-btn">Suspend all</button>
-      <button id="unsuspendAllBtn"     class="action-btn">Unsuspend all</button>
+    <!-- Bulk actions: two groups side by side -->
+    <div class="bulk-actions">
+      <div class="bulk-group">
+        <span class="bulk-label">This window</span>
+        <button id="suspendOthersWindowBtn" class="action-btn">Suspend others</button>
+        <button id="suspendAllWindowBtn"    class="action-btn">Suspend all</button>
+        <button id="unsuspendAllWindowBtn"  class="action-btn">Unsuspend all</button>
+      </div>
+      <div class="bulk-group">
+        <span class="bulk-label">All windows</span>
+        <button id="suspendOthersAllBtn" class="action-btn">Suspend others</button>
+        <button id="suspendAllAllBtn"    class="action-btn">Suspend all</button>
+        <button id="unsuspendAllBtn"     class="action-btn">Unsuspend all</button>
+      </div>
     </div>
   </div>
 
-  <hr class="divider" />
+  <!-- ══════════════════════════════ FOOTER ════════════════════════════════════ -->
 
-  <div class="actions">
-    <button id="configBtn" class="action-btn action-config">Configuration →</button>
+  <div class="popup-footer">
+    <button id="configBtn" class="config-btn">Configuration →</button>
   </div>
 
 </body>

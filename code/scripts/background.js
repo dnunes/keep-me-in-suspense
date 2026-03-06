@@ -163,7 +163,7 @@ const Suspension = {
 // =============================================================================
 
 const GroupSync = {
-  // Loads both rule arrays, calls fn(rule) for every chromeGroup rule,
+  // Loads both rule arrays, calls fn(rule) for every tabGroup rule,
   // then saves back to storage if any rule was changed or deleted.
   // fn return values: true = modified, false = no change, null = delete rule.
   async _applyToGroupRules(fn) {
@@ -172,7 +172,7 @@ const GroupSync = {
 
     //this function filters out unrecoverable broken rules as well as checking for changes
     const _checkDirty = function (rule) {
-      if (rule.type !== 'chromeGroup') { return true; }
+      if (rule.type !== 'tabGroup') { return true; }
       const result = fn(rule);
       if (result === null) { dirty = true; return false; }
       if (result) { dirty = true; }
@@ -340,7 +340,7 @@ async function onAlarmTick() {
     ...(config.activationRules ?? []),
     ...(config.whitelistRules ?? [])
   ];
-  if (allRules.some(r => r.type === 'chromeGroup' && r.broken)) {
+  if (allRules.some(r => r.type === 'tabGroup' && r.broken)) {
     await GroupSync.fixGroupRules();
   }
 

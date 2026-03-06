@@ -1,0 +1,69 @@
+/* ═══════════════════════════════════════════════════════════════
+   shared.css — structural styles common to popup and sidepanel
+   ═══════════════════════════════════════════════════════════════ */
+
+.hidden { display: none !important; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ── Toggle switch ──────────────────────────────────────────── */
+
+.master-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.master-toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.toggle-track {
+  display: inline-flex;
+  align-items: center;
+  width: 28px;
+  height: 15px;
+  background: var(--color-toggle-track);
+  border: 1px solid var(--color-toggle-track-border);
+  border-radius: 99px;
+  position: relative;
+  transition: background 140ms ease, border-color 140ms ease;
+  flex-shrink: 0;
+}
+
+.toggle-thumb {
+  position: absolute;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-toggle-thumb);
+  transition: transform 140ms ease, background 140ms ease;
+}
+
+.master-toggle input:checked ~ .toggle-track {
+  background: var(--color-toggle-track-on);
+  border-color: var(--color-toggle-track-border-on);
+}
+
+.master-toggle input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(13px);
+  background: var(--color-toggle-thumb-on);
+}

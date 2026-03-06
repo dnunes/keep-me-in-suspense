@@ -13,12 +13,66 @@ function getTabStatus(tab, config) {
 // Pattern generation from current tab URL
 // =============================================================================
 
+// Known compound TLDs (second-level domains that are themselves TLDs)
+const COMPOUND_TLDS = new Set([
+  // Brazil
+  'com.br', 'org.br', 'net.br', 'edu.br', 'gov.br', 'mil.br', 'art.br',
+  'esp.br', 'ind.br', 'inf.br', 'nom.br', 'tur.br',
+  // United Kingdom
+  'co.uk', 'org.uk', 'me.uk', 'net.uk', 'ltd.uk', 'plc.uk', 'gov.uk',
+  'sch.uk', 'ac.uk', 'nhs.uk', 'police.uk',
+  // Australia
+  'com.au', 'net.au', 'org.au', 'edu.au', 'gov.au', 'asn.au', 'id.au',
+  // Japan
+  'co.jp', 'ne.jp', 'or.jp', 'ac.jp', 'ad.jp', 'ed.jp', 'go.jp', 'gr.jp',
+  // New Zealand
+  'co.nz', 'net.nz', 'org.nz', 'govt.nz', 'ac.nz', 'school.nz',
+  // South Africa
+  'co.za', 'net.za', 'org.za', 'gov.za', 'ac.za', 'web.za',
+  // India
+  'co.in', 'net.in', 'org.in', 'gov.in', 'ac.in', 'res.in',
+  // Argentina
+  'com.ar', 'org.ar', 'net.ar', 'gov.ar', 'edu.ar',
+  // Mexico
+  'com.mx', 'org.mx', 'net.mx', 'gob.mx', 'edu.mx',
+  // Colombia
+  'com.co', 'org.co', 'net.co', 'gov.co', 'edu.co',
+  // China
+  'com.cn', 'net.cn', 'org.cn', 'gov.cn', 'edu.cn',
+  // Hong Kong
+  'com.hk', 'net.hk', 'org.hk', 'gov.hk', 'edu.hk',
+  // Singapore
+  'com.sg', 'net.sg', 'org.sg', 'gov.sg', 'edu.sg',
+  // Malaysia
+  'com.my', 'net.my', 'org.my', 'gov.my', 'edu.my',
+  // Others
+  'com.tr', 'org.tr', 'net.tr', 'gov.tr', 'edu.tr',
+  'com.pe', 'org.pe', 'net.pe', 'gov.pe', 'edu.pe',
+  'com.ve', 'org.ve', 'net.ve', 'gov.ve',
+  'com.ph', 'org.ph', 'net.ph', 'gov.ph',
+  'com.pk', 'org.pk', 'net.pk', 'gov.pk',
+  'com.ng', 'org.ng', 'net.ng', 'gov.ng',
+  'com.eg', 'org.eg', 'net.eg', 'gov.eg',
+  'com.sa', 'org.sa', 'net.sa', 'gov.sa',
+  'com.ua', 'org.ua', 'net.ua', 'gov.ua',
+]);
+
+function getRegistrableDomain(hostname) {
+  const parts = hostname.split('.');
+  if (parts.length <= 2) { return hostname; }
+  const last2 = parts.slice(-2).join('.');
+  // If the last two parts form a compound TLD, take one more part
+  if (COMPOUND_TLDS.has(last2)) {
+    return parts.length > 3 ? parts.slice(-3).join('.') : hostname;
+  }
+  return last2;
+}
+
 function generatePatterns(url) {
   try {
     const u = new URL(url);
     const { hostname } = u;
-    const parts = hostname.split('.');
-    const rootDomain = parts.length > 2 ? parts.slice(-2).join('.') : hostname;
+    const rootDomain = getRegistrableDomain(hostname);
     const path = u.pathname.replace(/\/$/, '');
 
     return {
@@ -86,7 +140,7 @@ function renderActiveRule(ruleObj, patterns) {
   DOM.get('activeRuleName').textContent =
     ruleObj.type === 'urlPattern' ? ruleObj.value : ruleObj.groupTitle;
 
-  if (ruleObj.type === 'chromeGroup') {
+  if (ruleObj.type === 'tabGroup') {
     DOM.show(DOM.get('activeRuleGroupTag'));
   }
 
@@ -186,9 +240,9 @@ async function renderNoRule(effectiveTab, config, patterns) {
         const li = tpl.content.cloneNode(true).firstElementChild;
         const label = li.querySelector('.pattern-label');
         const icon = li.querySelector('.pattern-icon');
-        label.textContent = `${group.title} (All tabs in group)`;
+        label.textContent = `${group.title} (All tabs in tab group)`;
         const alreadyAdded = (config.activationRules ?? [])
-          .some(r => r.type === 'chromeGroup' && r.groupId === effectiveTab.groupId);
+          .some(r => r.type === 'tabGroup' && r.groupId === effectiveTab.groupId);
         if (alreadyAdded) {
           li.classList.add('pattern-added');
           icon.textContent = '✓';
@@ -196,10 +250,10 @@ async function renderNoRule(effectiveTab, config, patterns) {
         } else {
           li.addEventListener('click', async () => {
             const { activationRules = [] } = await chrome.storage.sync.get('activationRules');
-            if (!activationRules.some(r => r.type === 'chromeGroup' && r.groupId === group.id)) {
+            if (!activationRules.some(r => r.type === 'tabGroup' && r.groupId === group.id)) {
               activationRules.push({
                 id: crypto.randomUUID(),
-                type: 'chromeGroup',
+                type: 'tabGroup',
                 groupId: group.id,
                 groupTitle: group.title,
                 broken: false,
@@ -327,6 +381,12 @@ function setupConfigBtn(windowId) {
 // =============================================================================
 
 async function init() {
+  // Apply saved theme before rendering to avoid a flash
+  const { uiTheme } = await chrome.storage.local.get('uiTheme');
+  if (uiTheme && uiTheme !== 'auto') {
+    document.documentElement.dataset.theme = uiTheme;
+  }
+
   const [[tab], config] = await Promise.all([
     chrome.tabs.query({ active: true, currentWindow: true }),
     chrome.storage.sync.get(['settings', 'activationRules', 'whitelistRules', 'mediaRules'])
@@ -337,7 +397,6 @@ async function init() {
   let effectiveTab = null;
   if (!tab || (!Utils.isSuspendableUrl(tab.url) && !Utils.isSuspendedPage(tab.url))) {
     DOM.show(DOM.get('noUrlMsg'));
-    DOM.hide(DOM.get('singleActions'));
   } else {
     effectiveTab = resolveEffectiveTab(tab);
   }

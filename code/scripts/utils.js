@@ -73,7 +73,7 @@ export const RuleEngine = {
           Utils.matchesPattern(tab.url, rule.value)) {
         return { reason: 'Whitelisted', rule: rule.value, ruleObj: rule };
       }
-      if (rule.type === 'chromeGroup' &&
+      if (rule.type === 'tabGroup' &&
           !rule.broken &&
           tab.groupId === rule.groupId) {
         return { reason: 'Whitelisted group', rule: rule.groupTitle, ruleObj: rule };
@@ -102,7 +102,7 @@ export const RuleEngine = {
           Utils.matchesPattern(tab.url, rule.value)) {
         return rule;
       }
-      if (rule.type === 'chromeGroup' && tab.groupId === rule.groupId) {
+      if (rule.type === 'tabGroup' && tab.groupId === rule.groupId) {
         return rule;
       }
     }

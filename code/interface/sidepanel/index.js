@@ -60,7 +60,7 @@ function makeRuleRowBase(rule, templateId, deleteAction) {
     li.querySelector('.js-broken').classList.remove('hidden');
   }
   li.querySelector('.js-type').textContent =
-    rule.type === 'urlPattern' ? 'URL' : 'Group';
+    rule.type === 'urlPattern' ? 'URL' : 'Tab Group';
   li.querySelector('.js-label').textContent =
     rule.type === 'urlPattern' ? rule.value : rule.groupTitle;
   li.querySelector('.js-delete').addEventListener('click', deleteAction);
@@ -260,7 +260,7 @@ const Forms = {
       const match = groups.find(g => g.title === title);
       return {
         id: crypto.randomUUID(),
-        type: 'chromeGroup',
+        type: 'tabGroup',
         groupId: match ? match.id : -1,
         groupTitle: title,
         broken: !match,
@@ -280,7 +280,7 @@ const Forms = {
     const { activationRules } = Storage.get();
     const isDupe = rule.type === 'urlPattern'
       ? activationRules.some(r => r.type === 'urlPattern' && r.value === rule.value)
-      : activationRules.some(r => r.type === 'chromeGroup' && r.groupTitle === rule.groupTitle);
+      : activationRules.some(r => r.type === 'tabGroup' && r.groupTitle === rule.groupTitle);
     if (!isDupe) { await Storage.save({ activationRules: [...activationRules, rule] }); }
     Forms.closeActivation();
     UI.refresh();
@@ -318,7 +318,7 @@ const Forms = {
     const { whitelistRules } = Storage.get();
     const isDupe = rule.type === 'urlPattern'
       ? whitelistRules.some(r => r.type === 'urlPattern' && r.value === rule.value && r.onlyWhenAudible === rule.onlyWhenAudible)
-      : whitelistRules.some(r => r.type === 'chromeGroup' && r.groupTitle === rule.groupTitle && r.onlyWhenAudible === rule.onlyWhenAudible);
+      : whitelistRules.some(r => r.type === 'tabGroup' && r.groupTitle === rule.groupTitle && r.onlyWhenAudible === rule.onlyWhenAudible);
     if (!isDupe) { await Storage.save({ whitelistRules: [...whitelistRules, rule] }); }
     Forms.closeWhitelist();
     UI.refresh();
@@ -374,6 +374,36 @@ const Forms = {
 DOM.get('unsuspendAllBtn').addEventListener('click', () => {
   chrome.runtime.sendMessage({ type: 'UNSUSPEND_ALL' });
 });
+
+// Theme switcher (light / dark / auto)
+(function initTheme() {
+  const STORAGE_KEY = 'uiTheme';
+  const buttons = document.querySelectorAll('.theme-btn');
+
+  function applyTheme(theme) {
+    if (theme === 'auto') {
+      delete document.documentElement.dataset.theme;
+    } else {
+      document.documentElement.dataset.theme = theme;
+    }
+    buttons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.themeValue === theme);
+    });
+  }
+
+  // Restore saved preference, defaulting to auto (follow system)
+  chrome.storage.local.get(STORAGE_KEY, ({ [STORAGE_KEY]: saved }) => {
+    applyTheme(saved ?? 'auto');
+  });
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.dataset.themeValue;
+      applyTheme(theme);
+      chrome.storage.local.set({ [STORAGE_KEY]: theme });
+    });
+  });
+})();
 
 DOM.get('masterEnabled')
   .addEventListener('change', Actions.saveSettings);
