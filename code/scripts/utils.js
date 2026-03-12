@@ -16,7 +16,8 @@ export const Utils = {
     const normalizedPattern = pattern.replace(/\/$/, '');
     const escaped = normalizedPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
     try {
-      return new RegExp('^'+ escaped.replace(/\*/g, '.*') +'$').test(normalizedUrl);
+      const regexStr = escaped.replace(/\*/g, '.*').replace(/\/\.\*$/, '(?:/.*)?');
+      return new RegExp('^' + regexStr + '$').test(normalizedUrl);
     } catch {
       return false;
     }
