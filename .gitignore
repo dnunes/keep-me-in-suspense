@@ -22,3 +22,6 @@ dist/
 build/
 *.zip
 *.crx
+
+# Claude Code local/personal config — never commit
+.claude/
